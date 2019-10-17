@@ -146,6 +146,17 @@ class Game:
 from random import randrange
 
 if __name__ == '__main__':
+    ##################################
+    ## Check for a given random seed.
+    ## This is used during testing to
+    ## give predictable outputs.
+    ##
+    import sys
+    from random import seed
+    if len(sys.argv) == 2:
+        seed(int(sys.argv[1]))
+    ##################################
+
     not_a_winner = False
 
     game = Game()
