@@ -3,9 +3,12 @@
 class Game:
     def __init__(self):
         self.players        = []
-        self.places         = [0] * 6
-        self.purses         = [0] * 6
-        self.in_penalty_box = [0] * 6
+
+        self.max_num_players = 6
+
+        self.places         = [0] * self.max_num_players
+        self.purses         = [0] * self.max_num_players
+        self.in_penalty_box = [0] * self.max_num_players
 
         self.current_player = 0
         self.is_getting_out_of_penalty_box = False
@@ -15,7 +18,8 @@ class Game:
         self.sports_questions  = ['Sports Question {}'.format(i)  for i in range(50)]
         self.rock_questions    = ['Rock Question {}'.format(i)    for i in range(50)]
 
-        self.how_many_places = 12
+        self.how_many_places          = 12
+        self.coins_needed_for_victory = 6
 
     def is_playable(self):
         return self.how_many_players >= 2
@@ -102,12 +106,13 @@ class Game:
                     self.purses[self.current_player],
                 ))
 
-                winner = self._did_player_win()
+                game_should_continue = self._game_should_continue()
                 self.current_player = (self.current_player + 1) % self.how_many_players
-                return winner
+                return game_should_continue
             else:
                 self.current_player = (self.current_player + 1) % self.how_many_players
-                return True
+                game_should_continue = True
+                return game_should_continue
         else:
             print("Answer was corrent!!!!")
             self.purses[self.current_player] += 1
@@ -116,10 +121,10 @@ class Game:
                 self.purses[self.current_player],
             ))
 
-            winner = self._did_player_win()
+            game_should_continue = self._game_should_continue()
             self.current_player = (self.current_player + 1) % self.how_many_players
 
-            return winner
+            return game_should_continue
 
     def wrong_answer(self):
         print('Question was incorrectly answered')
@@ -127,10 +132,12 @@ class Game:
         self.in_penalty_box[self.current_player] = True
 
         self.current_player = (self.current_player + 1) % self.how_many_players
-        return True
+        game_should_continue = True
 
-    def _did_player_win(self):
-        return not (self.purses[self.current_player] == 6)
+        return game_should_continue
+
+    def _game_should_continue(self):
+        return not (self.purses[self.current_player] == self.coins_needed_for_victory)
 
 from random import randrange
 
@@ -146,7 +153,7 @@ if __name__ == '__main__':
         seed(int(sys.argv[1]))
     ##################################
 
-    not_a_winner = False
+    game_should_continue = True
 
     game = Game()
 
@@ -154,12 +161,10 @@ if __name__ == '__main__':
     game.add('Pat')
     game.add('Sue')
 
-    while True:
+    while game_should_continue:
         game.roll(randrange(5) + 1)
 
         if randrange(9) == 7:
-            not_a_winner = game.wrong_answer()
+            game_should_continue = game.wrong_answer()
         else:
-            not_a_winner = game.was_correctly_answered()
-
-        if not not_a_winner: break
+            game_should_continue = game.was_correctly_answered()
