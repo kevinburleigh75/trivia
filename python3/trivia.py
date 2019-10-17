@@ -10,10 +10,12 @@ class Game:
         self.current_player = 0
         self.is_getting_out_of_penalty_box = False
 
-        self.pop_questions     = ['Pop Question {}'.format(i) for i in range(50)]
+        self.pop_questions     = ['Pop Question {}'.format(i)     for i in range(50)]
         self.science_questions = ['Science Question {}'.format(i) for i in range(50)]
-        self.sports_questions  = ['Sports Question {}'.format(i) for i in range(50)]
-        self.rock_questions    = ['Rock Question {}'.format(i) for i in range(50)]
+        self.sports_questions  = ['Sports Question {}'.format(i)  for i in range(50)]
+        self.rock_questions    = ['Rock Question {}'.format(i)    for i in range(50)]
+
+        self.how_many_places = 12
 
     def is_playable(self):
         return self.how_many_players >= 2
@@ -44,9 +46,7 @@ class Game:
                 print('{} is getting out of the penalty box'.format(
                     self.players[self.current_player]
                 ))
-                self.places[self.current_player] = self.places[self.current_player] + roll
-                if self.places[self.current_player] > 11:
-                    self.places[self.current_player] = self.places[self.current_player] - 12
+                self.places[self.current_player] = (self.places[self.current_player] + roll) % self.how_many_places
 
                 print('{}\'s new location is {}'.format(
                     self.players[self.current_player],
@@ -60,9 +60,7 @@ class Game:
                 ))
                 self.is_getting_out_of_penalty_box = False
         else:
-            self.places[self.current_player] = self.places[self.current_player] + roll
-            if self.places[self.current_player] > 11:
-                self.places[self.current_player] = self.places[self.current_player] - 12
+            self.places[self.current_player] = (self.places[self.current_player] + roll) % self.how_many_places
 
             print('{}\'s new location is {}'.format(
                 self.players[self.current_player],
@@ -105,12 +103,10 @@ class Game:
                 ))
 
                 winner = self._did_player_win()
-                self.current_player += 1
-                if self.current_player == self.how_many_players: self.current_player = 0
+                self.current_player = (self.current_player + 1) % self.how_many_players
                 return winner
             else:
-                self.current_player += 1
-                if self.current_player == self.how_many_players: self.current_player = 0
+                self.current_player = (self.current_player + 1) % self.how_many_players
                 return True
         else:
             print("Answer was corrent!!!!")
@@ -121,8 +117,7 @@ class Game:
             ))
 
             winner = self._did_player_win()
-            self.current_player += 1
-            if self.current_player == self.how_many_players: self.current_player = 0
+            self.current_player = (self.current_player + 1) % self.how_many_players
 
             return winner
 
@@ -131,8 +126,7 @@ class Game:
         print('{} was sent to the penalty box'.format(self.players[self.current_player]))
         self.in_penalty_box[self.current_player] = True
 
-        self.current_player += 1
-        if self.current_player == self.how_many_players: self.current_player = 0
+        self.current_player = (self.current_player + 1) % self.how_many_players
         return True
 
     def _did_player_win(self):
