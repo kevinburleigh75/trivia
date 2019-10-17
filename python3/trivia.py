@@ -43,27 +43,7 @@ class Game:
         print('{} is the current player'.format(self.players[self.current_player]))
         print('They have rolled a {}'.format(roll))
 
-        if self.in_penalty_box[self.current_player]:
-            if roll % 2 != 0:
-                self.is_getting_out_of_penalty_box = True
-
-                print('{} is getting out of the penalty box'.format(
-                    self.players[self.current_player]
-                ))
-                self.places[self.current_player] = (self.places[self.current_player] + roll) % self.how_many_places
-
-                print('{}\'s new location is {}'.format(
-                    self.players[self.current_player],
-                    self.places[self.current_player],
-                ))
-                print('The category is {}'.format(self._current_category))
-                self._ask_question()
-            else:
-                print('{} is not getting out of the penalty box'.format(
-                    self.players[self.current_player]
-                ))
-                self.is_getting_out_of_penalty_box = False
-        else:
+        def _advance_current_player_place():
             self.places[self.current_player] = (self.places[self.current_player] + roll) % self.how_many_places
 
             print('{}\'s new location is {}'.format(
@@ -71,8 +51,21 @@ class Game:
                 self.places[self.current_player],
             ))
             print('The category is {}'.format(self._current_category))
-
             self._ask_question()
+
+        if self.in_penalty_box[self.current_player]:
+            self.is_getting_out_of_penalty_box = (roll % 2 != 0)
+            if self.is_getting_out_of_penalty_box:
+                print('{} is getting out of the penalty box'.format(
+                    self.players[self.current_player]
+                ))
+                _advance_current_player_place()
+            else:
+                print('{} is not getting out of the penalty box'.format(
+                    self.players[self.current_player]
+                ))
+        else:
+            _advance_current_player_place()
 
     def _ask_question(self):
         if self._current_category == 'Pop':     print(self.pop_questions.pop(0))
