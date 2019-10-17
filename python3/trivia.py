@@ -7,22 +7,13 @@ class Game:
         self.purses         = [0] * 6
         self.in_penalty_box = [0] * 6
 
-        self.pop_questions     = []
-        self.science_questions = []
-        self.sports_questions  = []
-        self.rock_questions    = []
-
         self.current_player = 0
         self.is_getting_out_of_penalty_box = False
 
-        for i in range(50):
-            self.pop_questions.append("Pop Question %s" % i)
-            self.science_questions.append("Science Question %s" % i)
-            self.sports_questions.append("Sports Question %s" % i)
-            self.rock_questions.append(self.create_rock_question(i))
-
-    def create_rock_question(self, index):
-        return "Rock Question %s" % index
+        self.pop_questions     = ["Pop Question %s"     % i for i in range(50)]
+        self.science_questions = ["Science Question %s" % i for i in range(50)]
+        self.sports_questions  = ["Sports Question %s"  % i for i in range(50)]
+        self.rock_questions    = ["Rock Question %s"    % i for i in range(50)]
 
     def is_playable(self):
         return self.how_many_players >= 2
@@ -83,15 +74,18 @@ class Game:
     @property
     def _current_category(self):
         if self.places[self.current_player] ==  0: return 'Pop'
-        if self.places[self.current_player] ==  4: return 'Pop'
-        if self.places[self.current_player] ==  8: return 'Pop'
         if self.places[self.current_player] ==  1: return 'Science'
-        if self.places[self.current_player] ==  5: return 'Science'
-        if self.places[self.current_player] ==  9: return 'Science'
         if self.places[self.current_player] ==  2: return 'Sports'
+        if self.places[self.current_player] ==  3: return 'Rock'
+        if self.places[self.current_player] ==  4: return 'Pop'
+        if self.places[self.current_player] ==  5: return 'Science'
         if self.places[self.current_player] ==  6: return 'Sports'
+        if self.places[self.current_player] ==  7: return 'Rock'
+        if self.places[self.current_player] ==  8: return 'Pop'
+        if self.places[self.current_player] ==  9: return 'Science'
         if self.places[self.current_player] == 10: return 'Sports'
-        return 'Rock'
+        if self.places[self.current_player] == 11: return 'Rock'
+        raise 'invalid current_player value {}'.format(self.current_player)
 
     def was_correctly_answered(self):
         if self.in_penalty_box[self.current_player]:
@@ -105,11 +99,11 @@ class Game:
 
                 winner = self._did_player_win()
                 self.current_player += 1
-                if self.current_player == len(self.players): self.current_player = 0
+                if self.current_player == self.how_many_players: self.current_player = 0
                 return winner
             else:
                 self.current_player += 1
-                if self.current_player == len(self.players): self.current_player = 0
+                if self.current_player == self.how_many_players: self.current_player = 0
                 return True
         else:
             print("Answer was corrent!!!!")
@@ -121,7 +115,7 @@ class Game:
 
             winner = self._did_player_win()
             self.current_player += 1
-            if self.current_player == len(self.players): self.current_player = 0
+            if self.current_player == self.how_many_players: self.current_player = 0
 
             return winner
 
@@ -131,7 +125,7 @@ class Game:
         self.in_penalty_box[self.current_player] = True
 
         self.current_player += 1
-        if self.current_player == len(self.players): self.current_player = 0
+        if self.current_player == self.how_many_players: self.current_player = 0
         return True
 
     def _did_player_win(self):
