@@ -98,14 +98,6 @@ class Game:
                     self.players[self.current_player],
                     self.purses[self.current_player],
                 ))
-
-                game_should_continue = self._game_should_continue()
-                self.current_player = (self.current_player + 1) % self.how_many_players
-                return game_should_continue
-            else:
-                self.current_player = (self.current_player + 1) % self.how_many_players
-                game_should_continue = True
-                return game_should_continue
         else:
             print("Answer was corrent!!!!")
             self.purses[self.current_player] += 1
@@ -114,19 +106,17 @@ class Game:
                 self.purses[self.current_player],
             ))
 
-            game_should_continue = self._game_should_continue()
-            self.current_player = (self.current_player + 1) % self.how_many_players
-
-            return game_should_continue
+        game_should_continue = self._game_should_continue()
+        self.current_player = (self.current_player + 1) % self.how_many_players
+        return game_should_continue
 
     def wrong_answer(self):
         print('Question was incorrectly answered')
         print('{} was sent to the penalty box'.format(self.players[self.current_player]))
         self.in_penalty_box[self.current_player] = True
 
+        game_should_continue = self._game_should_continue()
         self.current_player = (self.current_player + 1) % self.how_many_players
-        game_should_continue = True
-
         return game_should_continue
 
     def _game_should_continue(self):
