@@ -82,7 +82,7 @@ class Game:
     def was_correctly_answered(self):
         def print_message(typo=False):
             if typo:
-                print('Answer was corrent!!!!')
+                print('Answer was correct!!!!')
             else:
                 print('Answer was correct!!!!')
 
