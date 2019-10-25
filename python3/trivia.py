@@ -80,15 +80,9 @@ class Game:
         raise 'unknown place {}'.format(self.places[self.current_player])
 
     def was_correctly_answered(self):
-        def print_message(typo=False):
-            if typo:
-                print('Answer was correct!!!!')
-            else:
-                print('Answer was correct!!!!')
-
         if not self.in_penalty_box[self.current_player] or self.is_getting_out_of_penalty_box:
             self.purses[self.current_player] += 1
-            print_message(typo=not self.in_penalty_box[self.current_player])
+            print('Answer was correct!!!!')
             print('{} now has {} Gold Coins.'.format(
                 self.players[self.current_player],
                 self.purses[self.current_player],
