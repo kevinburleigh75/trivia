@@ -90,14 +90,8 @@ class Game:
         raise 'invalid current_player value {}'.format(self.current_player)
 
     def was_correctly_answered(self):
-        def _message(misspell=False):
-            if misspell:
-                print("Answer was corrent!!!!")
-            else:
-                print('Answer was correct!!!!')
-
         if (not self.in_penalty_box[self.current_player]) or self.is_getting_out_of_penalty_box:
-            _message(misspell=(not self.in_penalty_box[self.current_player]))
+            print('Answer was correct!!!!')
             self.purses[self.current_player] += 1
             print('{} now has {} Gold Coins.'.format(
                 self.players[self.current_player],
