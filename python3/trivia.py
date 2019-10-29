@@ -47,6 +47,7 @@ class Game:
             self.is_getting_out_of_penalty_box = (roll % 2 != 0)
             if self.is_getting_out_of_penalty_box:
                 print('{} is getting out of the penalty box'.format(self.players[self.current_player]))
+                self.in_penalty_box[self.current_player] = False
                 update_player_place()
                 self._ask_question()
             else:
